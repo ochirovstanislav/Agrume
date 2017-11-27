@@ -32,7 +32,7 @@ public final class Agrume: UIViewController {
   fileprivate let dataSource: AgrumeDataSource?
   private var containerSubviews = [UIView]()
   private var isShareNeeded = false
-  fileprivate var toolbar: UIToolbar
+  public var toolbar: AgrumeToolbar
   
   public typealias DownloadCompletion = (_ image: UIImage?) -> Void
   
@@ -137,7 +137,7 @@ public final class Agrume: UIViewController {
     self.dataSource = dataSource
     self.startIndex = startIndex
     
-    self.toolbar = UIToolbar()
+    self.toolbar = AgrumeToolbar()
     
     super.init(nibName: nil, bundle: nil)
     
@@ -301,6 +301,7 @@ public final class Agrume: UIViewController {
     guard let cell = self.collectionView.visibleCells[0] as? AgrumeCell, let image = cell.image, let shareHandler = shareHandler else {
       return
     }
+    
     shareHandler(image)
   }
   
@@ -632,6 +633,24 @@ extension Agrume {
     return statusBarStyle ?? super.preferredStatusBarStyle
   }
   
+}
+
+public class AgrumeToolbar: UIToolbar {
+  public var titleLabel: UILabel?
+  
+  public override func layoutSubviews() {
+    super.layoutSubviews()
+    titleLabel = UILabel()
+    titleLabel!.center = CGPoint(x: self.frame.midX, y: self.frame.midY)
+    titleLabel!.translatesAutoresizingMaskIntoConstraints = false
+    titleLabel!.font = UIFont.systemFont(ofSize: 14.0)
+    titleLabel!.textColor = .white
+    self.addSubview(titleLabel!)
+    
+    let xConstraint = NSLayoutConstraint(item: titleLabel!, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0)
+    let yConstraint = NSLayoutConstraint(item: titleLabel!, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0)
+    NSLayoutConstraint.activate([xConstraint, yConstraint])
+  }
 }
 
 
