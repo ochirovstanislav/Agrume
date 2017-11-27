@@ -295,12 +295,13 @@ public final class Agrume: UIViewController {
     }
   }
   
+  public var shareHandler: ((_ image: UIImage) -> Void)?
+  
   @objc func share() {
-    guard let cell = self.collectionView.visibleCells[0] as? AgrumeCell, let image = cell.image else {
+    guard let cell = self.collectionView.visibleCells[0] as? AgrumeCell, let image = cell.image, let shareHandler = shareHandler else {
       return
     }
-    let presentVC = UIActivityViewController(activityItems: [image], applicationActivities: [])
-    self.present(presentVC, animated: true, completion: nil)
+    shareHandler(image)
   }
   
   private func showFrom(_ viewController: UIViewController) {
@@ -632,4 +633,5 @@ extension Agrume {
   }
   
 }
+
 
